@@ -93,6 +93,7 @@ void CategoryButtons::update(int rowShift) {
         button->setText(data->label);
         button->setEnabled(true);
         button->setPlu(data->id);
+        button->setColor(data->color);
     }
 
     scrollBar->setMaximum(getScrollbarLength());
@@ -101,7 +102,7 @@ void CategoryButtons::search(QString searchTerm) {
     QSqlQuery query;
 
     //breadCrumbs.clear();
-    if (query.exec("SELECT plu, name FROM article WHERE name LIKE '%" + searchTerm + "%' OR plu LIKE '%"+ searchTerm +"%';")) {
+    if (query.exec("SELECT plu, name, color FROM article WHERE name LIKE '%" + searchTerm + "%' OR plu LIKE '%"+ searchTerm +"%';")) {
 
         categories.clear();
         articles.clear();
@@ -111,6 +112,7 @@ void CategoryButtons::search(QString searchTerm) {
             a = new IdLabel;
             a->id = query.value(0).toInt();
             a->label = query.value(1).toString();
+            a->color = query.value(2).toString();
             this->articles.append(a);
         }
     } else {
@@ -118,7 +120,6 @@ void CategoryButtons::search(QString searchTerm) {
     }
     update();
 }
-
 void CategoryButtons::openCategory(int categoryId) {
     QSqlQuery query;
 
@@ -143,13 +144,14 @@ void CategoryButtons::openCategory(int categoryId) {
         qDebug() << "Categories could not be loaded from database!";
     }
 
-    if (query.exec("SELECT plu, name FROM article WHERE categoryId =" + QString::number(categoryId) + ";")) {
+    if (query.exec("SELECT plu, name, color FROM article WHERE categoryId =" + QString::number(categoryId) + ";")) {
         articles.clear();
         IdLabel *a;
         while (query.next()) {
             a = new IdLabel;
             a->id = query.value(0).toInt();
             a->label = query.value(1).toString();
+            a->color = query.value(2).toString();
             this->articles.append(a);
         }
     }

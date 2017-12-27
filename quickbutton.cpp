@@ -43,15 +43,17 @@ void QuickButton::setCategory(int categoryId) {
     this->categoryId = categoryId;
     this->categoryFlag = true;
 
-    this->setStyleSheet("background-color: grey;");
+    this->setStyleSheet("background-color: grey; font-weight: bold;");
 }
 
 void QuickButton::setPlu(int plu) {
     this->plu = plu;
     this->categoryFlag = false;
-    this->setStyleSheet("background-color: blue;");
 }
 void QuickButton::setDisabled(bool b) {
     QPushButton::setDisabled(b);
     this->setStyleSheet("");
+}
+void QuickButton::setColor(QString color) {
+    this->setStyleSheet("background-color:" + color + ";");
 }

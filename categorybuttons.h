@@ -12,6 +12,7 @@
 struct IdLabel {
   int id;
   QString label;
+  QString color;
 } ;
 
 class CategoryButtons : public QObject

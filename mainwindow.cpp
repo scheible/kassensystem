@@ -81,29 +81,14 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 void MainWindow::deleteArticle() {
 
 }
-
-void MainWindow::on_treeView_clicked(const QModelIndex &index)
-{
-    //think about removeing this function when cleaning up the code
-    int row = index.row();
-    Article* art = sale->getArticleIndex(row);
-    if (art) {
-        qDebug() << art->getName();
-    } else {
-        qDebug() << "no article found";
-    }
-}
-
 void MainWindow::showMessage(QString msg) {
     //There is a specific label on the GUI for generic messages
     //set it with this method
     ui->lblMessage->setText(msg);
 }
-
 void MainWindow::addArticle(Article *art, float quantity) {
     /* Info regarding takeBackArticle:
      * A takeback article is an article that is normally not sold
@@ -155,7 +140,6 @@ void MainWindow::addArticle(Article *art, float quantity) {
         }
     }
 }
-
 void MainWindow::addArticlePlu(int plu, float quantity) {
     Article* art;
     art = artFact->newPLUArticleFromDb(plu);
@@ -164,7 +148,6 @@ void MainWindow::addArticlePlu(int plu, float quantity) {
         this->addArticle(art,quantity);
     }
 }
-
 void MainWindow::addArticleEAN(QString ean, float quantity) {
     // Handle with care: not tested at all!!!
     Article* art;
@@ -174,7 +157,6 @@ void MainWindow::addArticleEAN(QString ean, float quantity) {
         this->addArticle(art,quantity);
     }
 }
-
 void MainWindow::on_btnAddArticle_clicked()
 {
     if (ui->txtPlu->text().length() >= 8) {
@@ -201,7 +183,6 @@ void MainWindow::on_btnAddArticle_clicked()
     ui->txtQuantity->clear();
     ui->txtPlu->setFocus();
 }
-
 void MainWindow::on_btnDeleteArticle_clicked()
 {
      QModelIndexList i = ui->treeView->selectionModel()->selectedRows();
@@ -210,14 +191,12 @@ void MainWindow::on_btnDeleteArticle_clicked()
         art->deleteThis();
      }
 }
-
 void MainWindow::updateTotal(float total) {
     ui->lblPriceTotal->setText( QString::number(total,'f',2) + " €" );
 }
 void MainWindow::updateTime(QDateTime datetime) {
     ui->lblTimestampStart->setText( datetime.toString("hh:mm:ss - dd.MM.yy"));
 }
-
 void MainWindow::on_txtSearch_returnPressed()
 {
     if (ui->txtSearch->text() != "") {
@@ -253,7 +232,6 @@ void MainWindow::hookSale(Sale* s) {
     updateTotal(sale->getTotal());
     showMessage("");
 }
-
 void MainWindow::newSale() {
 
     // only create a new sales process
@@ -274,13 +252,11 @@ void MainWindow::newSale() {
         on_btnJumpNewestSale_clicked();
     }
 }
-
 void MainWindow::on_btnCategoryGoToRoot_clicked()
 {
     catButtons->openCategory(0);
     ui->txtSearch->clear();
 }
-
 void MainWindow::on_btnSaleBack_clicked()
 {
     //check if there is a previous sale
@@ -301,7 +277,6 @@ void MainWindow::on_btnSaleBack_clicked()
         }
     }
 }
-
 void MainWindow::on_btnSaleNext_clicked()
 {
     //check if it is not the most current sale
@@ -318,14 +293,12 @@ void MainWindow::on_btnSaleNext_clicked()
         ui->btnSaleBack->setEnabled(true);
     }
 }
-
 void MainWindow::on_btnPay_clicked()
 {
     PayDialog *p = new PayDialog(this,this);
     p->show();
     //TODO: Make sure that the PayDialog object is destroyed properly
 }
-
 void MainWindow::on_btnJumpNewestSale_clicked()
 {
     if (salesQueue.length() > 0) {
@@ -339,7 +312,6 @@ void MainWindow::on_btnJumpNewestSale_clicked()
     ui->btnSaleNext->setDisabled(true);
     ui->btnSaleBack->setEnabled(true);
 }
-
 void MainWindow::on_btnQuantityDec_clicked()
 {
     QModelIndexList i = ui->treeView->selectionModel()->selectedRows();
@@ -348,7 +320,6 @@ void MainWindow::on_btnQuantityDec_clicked()
         art->addQuantity(-1);
     }
 }
-
 void MainWindow::on_btnQuantityInc_clicked()
 {
     QModelIndexList i = ui->treeView->selectionModel()->selectedRows();
@@ -357,7 +328,6 @@ void MainWindow::on_btnQuantityInc_clicked()
         art->addQuantity(1);
     }
 }
-
 void MainWindow::on_btnQuantityEnter_clicked()
 {
     QModelIndexList i = ui->treeView->selectionModel()->selectedRows();
@@ -368,7 +338,6 @@ void MainWindow::on_btnQuantityEnter_clicked()
         //TODO: Make Sure the changeQuantity Window is destroyed properly
     }
 }
-
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     if (this->isActiveWindow()) {
         if (event->key() == Qt::Key_B && !ui->txtSearch->hasFocus()) {
@@ -418,18 +387,18 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
             ui->txtSearch->setFocus();
             ui->txtSearch->clear();
         } else if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-            this->on_btnAddArticle_clicked();
+            if (!ui->txtSearch->hasFocus() && ui->txtPlu->text() != "") {
+                this->on_btnAddArticle_clicked();
+            }
         }
     }
 }
-
 void MainWindow::on_btnCustomer_clicked()
 {
     SearchCustomer *s = new SearchCustomer(sale);
     s->show();
     //TODO: Make sure the searchCustomer window is destroyed properly
 }
-
 void MainWindow::on_btnDeleteAll_clicked()
 {
     if (!sale->isLocked()) {
@@ -440,9 +409,6 @@ void MainWindow::on_btnDeleteAll_clicked()
         this->showMessage("Verkaufsvorgang nicht mehr editierbar. Gehe auf Akt. Vorgang!");
     }
 }
-
-
-
 void MainWindow::on_btnCalculator_clicked()
 {
     system("calc");

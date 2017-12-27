@@ -26,6 +26,7 @@ private:
     QString unit;
     bool aboutToDelete = false;
     bool locked = false;
+    QString color = "";
 
     void updatePricesLabels();
 
@@ -50,6 +51,7 @@ public:
     void addQuantity(float quantity);
     void lock();
     void unlock();
+    void setColor(QString color);
 
     int getID();
     int getPLU();
@@ -70,6 +72,7 @@ public:
     QDate getOfferEndDate();
     QString getCategory();
     QString getBarcode();
+    QString getColor();
 
     bool isAboutToDelete();
 

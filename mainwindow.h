@@ -48,7 +48,6 @@ public slots:
     void keyReleaseEvent(QKeyEvent *);
 
 private slots:
-    void on_treeView_clicked(const QModelIndex &index);
     void showMessage(QString msg);
     void on_btnAddArticle_clicked();
     void on_btnDeleteArticle_clicked();

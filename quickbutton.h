@@ -21,6 +21,7 @@ public:
     void setCategory(int categoryId);
     void setPlu(int plu);
     void setDisabled(bool);
+    void setColor(QString color);
 
 private slots:
     void this_clicked();

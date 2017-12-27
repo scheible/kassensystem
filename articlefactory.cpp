@@ -22,7 +22,8 @@ Article* ArticleFactory::newPLUArticleFromDb(int plu) {
                     a.offerEnd, \
                     u.name, \
                     a.ean, \
-                    a.multipl \
+                    a.multipl, \
+                    a.color \
                 FROM \
                     article as a \
                 LEFT JOIN unit as u ON a.unitId = u.id \
@@ -34,6 +35,7 @@ Article* ArticleFactory::newPLUArticleFromDb(int plu) {
     {
         return this->loadDataFromQuery(query);
     } else {
+        qDebug() << "couldn't load article by PLU (" << command << ")";
         return 0;
     }
 }
@@ -48,7 +50,8 @@ Article* ArticleFactory::newIDArticleFromDb(int id) {
                             a.offerEnd, \
                             u.name, \
                             a.ean, \
-                            a.multipl \
+                            a.multipl, \
+                            a.color \
                         FROM \
                             article as a \
                         LEFT JOIN unit as u ON a.unitId = u.id \
@@ -73,7 +76,8 @@ Article* ArticleFactory::newBarcodeArticleFromDb(QString barcode) {
                             a.offerEnd, \
                             u.name, \
                             a.ean, \
-                            a.multipl \
+                            a.multipl, \
+                            a.color \
                         FROM \
                             article as a \
                         LEFT JOIN unit as u ON a.unitId = u.id \
@@ -106,6 +110,7 @@ Article* ArticleFactory::loadDataFromQuery(QSqlQuery query) {
         art->setBarcode(           query.value(7).toString()   );
         art->setQuantity(1);    //set Quantity to 1 as a standard
         art->setMultipl(           query.value(9).toFloat()    );
+        art->setColor(             query.value(10).toString()  );
     }
 
     return art;

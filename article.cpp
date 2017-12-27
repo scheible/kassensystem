@@ -77,6 +77,9 @@ void Article::addQuantity(float quantity) {
         emit this->quantityChanged(this->quantity);
     }
 }
+void Article::setColor(QString color) {
+    this->color = color;
+}
 
 int Article::getID() {
     return this->id;
@@ -169,6 +172,9 @@ bool Article::isTakeBack() {
 }
 QString Article::getBarcode() {
     return this->barcode;
+}
+QString Article::getColor() {
+    return this->color;
 }
 
 //public slots:
