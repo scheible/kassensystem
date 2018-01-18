@@ -11,6 +11,7 @@
 #include "sale.h"
 #include "articlefactory.h"
 #include "categorybuttons.h"
+#include "customerdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +32,8 @@ private:
     int currentSaleIndex = 0;
     CategoryButtons* catButtons;
     QSqlDatabase db;
+    QString databaseFileName;
+    CustomerDialog *customerDialog;
 
     void unhookSale(Sale*);
     void hookSale(Sale*);

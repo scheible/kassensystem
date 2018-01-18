@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     customersearchtablemodel.cpp \
     newcustomer.cpp \
     bonprinter.cpp \
-    iniparser.cpp
+    iniparser.cpp \
+    customerdialog.cpp
 
 HEADERS  += mainwindow.h \
     article.h \
@@ -45,11 +46,13 @@ HEADERS  += mainwindow.h \
     customersearchtablemodel.h \
     newcustomer.h \
     bonprinter.h \
-    iniparser.h
+    iniparser.h \
+    customerdialog.h
 
 FORMS    += mainwindow.ui \
     freearticle.ui \
     changequantity.ui \
     paydialog.ui \
     searchcustomer.ui \
-    newcustomer.ui
+    newcustomer.ui \
+    customerdialog.ui

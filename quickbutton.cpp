@@ -42,8 +42,6 @@ int QuickButton::getPlu() {
 void QuickButton::setCategory(int categoryId) {
     this->categoryId = categoryId;
     this->categoryFlag = true;
-
-    this->setStyleSheet("background-color: grey; font-weight: bold;");
 }
 
 void QuickButton::setPlu(int plu) {
@@ -55,5 +53,9 @@ void QuickButton::setDisabled(bool b) {
     this->setStyleSheet("");
 }
 void QuickButton::setColor(QString color) {
-    this->setStyleSheet("background-color:" + color + ";");
+    if (this->categoryFlag) {
+        this->setStyleSheet("font-weight: bold; background-color:" + color + ";");
+    } else {
+        this->setStyleSheet("background-color:" + color + ";");
+    }
 }

@@ -79,6 +79,7 @@ void CategoryButtons::update(int rowShift) {
         button->setText(data->label);
         button->setEnabled(true);
         button->setCategory(data->id);
+        button->setColor(data->color);
     }
 
     int firstArticleButton = nCat-buttonShift;
@@ -131,6 +132,7 @@ void CategoryButtons::openCategory(int categoryId) {
             c = new IdLabel;
             c->id = query.value(0).toInt();
             c->label = query.value(1).toString();
+            c->color = query.value(4).toString();
             this->categories.append(c);
         }
 

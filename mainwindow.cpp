@@ -11,6 +11,8 @@
 
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QMessageBox>
+#include <QDesktopWidget>
 #include "searchcustomer.h"
 #include "IniParser.h"
 
@@ -21,8 +23,33 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
+    IniParser ip("settings.ini");
+    if (ip.existsKey("databasefilename")) {
+        this->databaseFileName = ip.getValue("databasefilename").toString();
+    } else {
+        this->databaseFileName = "database.db";
+    }
+
+    //Show the customer display
+    this->customerDialog = new CustomerDialog(this);
+    if (ip.existsKey("customerDialog")) {
+        if (ip.getValue("customerDialog").toInt() == 1) {
+            // custom
+            customerDialog->show();
+        } else {
+             int display = ip.getValue("customerDialog").toInt()-1;
+             QDesktopWidget dw;
+             if (dw.screenCount() > display) {  //the monitor exists
+                 QRect screenres = dw.screenGeometry(display);
+                 this->customerDialog->move(QPoint(screenres.x(), screenres.y()));
+                 this->customerDialog->showFullScreen();
+             }
+        }
+    }
+
     // Open the database file
-    QFileInfo databaseFile("database.db");
+    QMessageBox messageBox;
+    QFileInfo databaseFile(this->databaseFileName);
     if (databaseFile.exists() && databaseFile.isFile())
     {
         this->db = QSqlDatabase::addDatabase("QSQLITE");
@@ -30,10 +57,12 @@ MainWindow::MainWindow(QWidget *parent) :
         if (this->db.open()) {
             qDebug() << "opened database successfully";
         } else {
-            qDebug() << "opening database failed";
+            qDebug() << "opening database failed";           
+            messageBox.critical(0,"Error","Datenbank konnte nicht geöffnet werden");
         }
     } else {
         qDebug() << "database file " << databaseFile.path() << databaseFile.fileName() << " not found";
+        messageBox.critical(0,"Error","Datenbankdatei wurde nicht gefunden. Dies kann daran liegen, dass die Datei " + this->databaseFileName + " gelöscht, verschoben oder umbenannt wurde!");
         return;
     }
 
@@ -46,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
     salesQueue.prepend(sale);
     hookSale(sale); //Connect the sale object to the GUI
 
-    artFact = new ArticleFactory("database.db");
+    artFact = new ArticleFactory(this->databaseFileName);
 
     catButtons = new CategoryButtons(this);
     catButtons->setupButtons(ui->gridLayout);
@@ -68,7 +97,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnJumpNewestSale->setEnabled(false);
 
     //Load settings
-    IniParser ip("settings.ini");
     if (ip.existsKey("articleWidth")) { ui->treeView->setColumnWidth(1,ip.getValue("articleWidth").toInt()); }
     if (ip.existsKey("fullscreen")) {
         if (ip.getValue("fullscreen").toBool() == true) {
@@ -93,7 +121,7 @@ void MainWindow::addArticle(Article *art, float quantity) {
     /* Info regarding takeBackArticle:
      * A takeback article is an article that is normally not sold
      * but taken back (i.e. bought from the customer). E.g. an empty
-     * create with deposit.
+     * crate with deposit.
      *
      * In effect the quantity 1 means that the price is negative
      *
@@ -220,6 +248,7 @@ void MainWindow::hookSale(Sale* s) {
 
     //show sale in the tree view
     ui->treeView->setModel(s);
+    customerDialog->setModel(s);
 
     //connect the signals to the new sale
     QObject::connect(s,SIGNAL(articleDeleted()),this,SLOT(deleteArticle()));
