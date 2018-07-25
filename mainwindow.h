@@ -32,15 +32,14 @@ private:
     int currentSaleIndex = 0;
     CategoryButtons* catButtons;
     QSqlDatabase db;
-    QString databaseFileName;
-    CustomerDialog *customerDialog;
-
+    QString databaseFileName;  
     void unhookSale(Sale*);
     void hookSale(Sale*);
     void addArticle(Article*,float);
 
 public:
     Sale* sale;
+    CustomerDialog *customerDialog;
 
 public slots:
     void deleteArticle();
@@ -70,6 +69,7 @@ private slots:
     void on_btnCustomer_clicked();
     void on_btnDeleteAll_clicked();
     void on_btnCalculator_clicked();
+    void on_btnReporting_clicked();
 };
 
 #endif // MAINWINDOW_H

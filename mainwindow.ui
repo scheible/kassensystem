@@ -440,6 +440,13 @@ QTreeView::item::selected::active {
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="btnReporting">
+            <property name="text">
+             <string>Umsätze</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>

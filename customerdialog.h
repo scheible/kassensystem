@@ -24,6 +24,10 @@ public:
 private:
     Ui::CustomerDialog *ui;
 
+public slots:
+    void updateTotal(float total);
+    void updateBack(float change);
+
 };
 
 #endif // CUSTOMERDIALOG_H

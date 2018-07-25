@@ -8,6 +8,7 @@
 #include "freearticle.h"
 #include "changequantity.h"
 #include "paydialog.h"
+#include "reporting.h"
 
 #include <QStandardItemModel>
 #include <QDebug>
@@ -241,6 +242,10 @@ void MainWindow::unhookSale(Sale* s) {
     //QObject::disconnect(ui->treeView->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),sale,SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::disconnect(s,SIGNAL(totalChanged(float)),this,SLOT(updateTotal(float)));
     QObject::disconnect(s,SIGNAL(startTimeIsUpdated(QDateTime)),this,SLOT(updateTime(QDateTime)));
+    QObject::disconnect(s,SIGNAL(totalChanged(float)),this->customerDialog,SLOT(updateTotal(float)));
+
+    this->customerDialog->updateBack(0);
+    this->customerDialog->updateTotal(0);
 }
 void MainWindow::hookSale(Sale* s) {
     //connect the sale object to the GUI. This means that all changes in the sale object are instantly reflected
@@ -256,9 +261,11 @@ void MainWindow::hookSale(Sale* s) {
     //QObject::connect(ui->treeView->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),sale,SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::connect(s,SIGNAL(totalChanged(float)),this,SLOT(updateTotal(float)));
     QObject::connect(s,SIGNAL(startTimeIsUpdated(QDateTime)),this,SLOT(updateTime(QDateTime)));
+    QObject::connect(s,SIGNAL(totalChanged(float)),this->customerDialog,SLOT(updateTotal(float)));
 
     updateTime(sale->getTimestampStart());
     updateTotal(sale->getTotal());
+    this->customerDialog->updateTotal(sale->getTotal());
     showMessage("");
 }
 void MainWindow::newSale() {
@@ -441,4 +448,10 @@ void MainWindow::on_btnDeleteAll_clicked()
 void MainWindow::on_btnCalculator_clicked()
 {
     system("calc");
+}
+
+void MainWindow::on_btnReporting_clicked()
+{
+    Reporting *rtp = new Reporting();
+    rtp->show();
 }

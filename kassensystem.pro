@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     newcustomer.cpp \
     bonprinter.cpp \
     iniparser.cpp \
-    customerdialog.cpp
+    customerdialog.cpp \
+    reporting.cpp
 
 HEADERS  += mainwindow.h \
     article.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     newcustomer.h \
     bonprinter.h \
     iniparser.h \
-    customerdialog.h
+    customerdialog.h \
+    reporting.h
 
 FORMS    += mainwindow.ui \
     freearticle.ui \
@@ -55,4 +57,7 @@ FORMS    += mainwindow.ui \
     paydialog.ui \
     searchcustomer.ui \
     newcustomer.ui \
-    customerdialog.ui
+    customerdialog.ui \
+    reporting.ui
+
+include(3rdparty/xlsx/qtxlsx.pri)

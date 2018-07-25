@@ -40,6 +40,8 @@ void PayDialog::on_btnOkWithBon_clicked()
     BonPrinter *bp = new BonPrinter(this->mWindow->sale);
     bp->print();
     delete bp;
+
+    mWindow->customerDialog->updateBack(change );
 }
 
 void PayDialog::on_btnOkWithoutBon_clicked()
@@ -50,6 +52,8 @@ void PayDialog::on_btnOkWithoutBon_clicked()
     ui->btnOkWithoutBon->setVisible(false);
     ui->txtGiven->setDisabled(true);
     ui->btnCancel->setDisabled(true);
+
+    mWindow->customerDialog->updateBack(change);
 
 }
 
