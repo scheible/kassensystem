@@ -5,7 +5,18 @@
 IniParser::IniParser(const QString filePath)
 {
     this->filePath = filePath;
+    this->readFileIn(this->filePath);
+}
 
+IniParser::IniParser()
+{
+    // Overload the constructor with a standard filename for the ini file
+    this->filePath = "settings.ini";
+    this->readFileIn(this->filePath);
+}
+
+void IniParser::readFileIn(const QString filePath)
+{
     //Open a text file
     QFile iniFile(filePath);
     if (iniFile.exists()) {

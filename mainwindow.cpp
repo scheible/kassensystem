@@ -31,13 +31,17 @@ MainWindow::MainWindow(QWidget *parent) :
         this->databaseFileName = "database.db";
     }
 
+    if (ip.existsKey("showWarningOnArticleNotFound")) {
+        this->showWarningOnArticleNotFound = (ip.getValue("showWarningOnArticleNotFound").toInt() == 1);
+    }
+
     //Show the customer display
     this->customerDialog = new CustomerDialog(this);
     if (ip.existsKey("customerDialog")) {
-        if (ip.getValue("customerDialog").toInt() == 1) {
+        if (ip.getValue("customerDialog").toInt() == 0) {
             // custom
             customerDialog->show();
-        } else {
+        } else if(ip.getValue("customerDialog").toInt() > 0) {
              int display = ip.getValue("customerDialog").toInt()-1;
              QDesktopWidget dw;
              if (dw.screenCount() > display) {  //the monitor exists
@@ -175,6 +179,15 @@ void MainWindow::addArticlePlu(int plu, float quantity) {
 
     if (art) {
         this->addArticle(art,quantity);
+    } else {
+        this->showMessage("PLU nicht gefunden!");
+
+        if (this->showWarningOnArticleNotFound) {
+            QMessageBox messageBox;
+            messageBox.warning(0,"Achtung!","PLU nicht gefunden!");
+        } else {
+            QApplication::beep();
+        }
     }
 }
 void MainWindow::addArticleEAN(QString ean, float quantity) {
@@ -184,6 +197,14 @@ void MainWindow::addArticleEAN(QString ean, float quantity) {
 
     if (art) {
         this->addArticle(art,quantity);
+    } else {
+        this->showMessage("EAN Code nicht gefunden.");
+        if (this->showWarningOnArticleNotFound) {
+            QMessageBox messageBox;
+            messageBox.warning(0,"Achtung!","EAN Code nicht gefunden!");
+        } else {
+            QApplication::beep();
+        }
     }
 }
 void MainWindow::on_btnAddArticle_clicked()
@@ -449,7 +470,6 @@ void MainWindow::on_btnCalculator_clicked()
 {
     system("calc");
 }
-
 void MainWindow::on_btnReporting_clicked()
 {
     Reporting *rtp = new Reporting();

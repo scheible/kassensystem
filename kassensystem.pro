@@ -51,7 +51,8 @@ HEADERS  += mainwindow.h \
     iniparser.h \
     customerdialog.h \
     reporting.h \
-    articleselectordialog.h
+    articleselectordialog.h \
+    globals.h
 
 FORMS    += mainwindow.ui \
     freearticle.ui \

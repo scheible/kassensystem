@@ -32,7 +32,8 @@ private:
     int currentSaleIndex = 0;
     CategoryButtons* catButtons;
     QSqlDatabase db;
-    QString databaseFileName;  
+    QString databaseFileName;
+    bool showWarningOnArticleNotFound = true;
     void unhookSale(Sale*);
     void hookSale(Sale*);
     void addArticle(Article*,float);

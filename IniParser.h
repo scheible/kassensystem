@@ -19,9 +19,11 @@ private:
 
     void parseLine(const QString line);
     void addKeyValuePair(const QString key, const QString value);
+    void readFileIn(const QString filePath);
 
 public:
     IniParser(const QString filePath);
+    IniParser();
     QVariant getValue(const QString key);
     int getKeyIndex(const QString key);
     bool existsKey(const QString key);
