@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QSqlQuery>
 #include <QSqlDatabase>
+#include "articleselectordialog.h"
 
 class ArticleFactory : public QObject
 {

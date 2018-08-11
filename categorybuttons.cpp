@@ -79,7 +79,11 @@ void CategoryButtons::update(int rowShift) {
         button->setText(data->label);
         button->setEnabled(true);
         button->setCategory(data->id);
-        button->setColor(data->color);
+        if (data->color.isEmpty()) {
+            button->setColor("darkgrey");
+        } else {
+            button->setColor(data->color);
+        }
     }
 
     int firstArticleButton = nCat-buttonShift;

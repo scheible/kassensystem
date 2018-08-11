@@ -93,10 +93,13 @@ Article* ArticleFactory::newBarcodeArticleFromDb(QString barcode) {
 }
 
 Article* ArticleFactory::loadDataFromQuery(QSqlQuery query) {
+    // It is possible that the query returns more than one article
+    // TODO: In this case show a window that asks for the article
 
+    QList<Article *> artList;
     Article* art = 0;
 
-    if (query.next()) {
+    while (query.next()) {
         art = new Article();
 
         //Fill the fields of the object from the database
@@ -111,6 +114,22 @@ Article* ArticleFactory::loadDataFromQuery(QSqlQuery query) {
         art->setQuantity(1);    //set Quantity to 1 as a standard
         art->setMultipl(           query.value(9).toFloat()    );
         art->setColor(             query.value(10).toString()  );
+
+        qDebug() << "found a new article!";
+        artList.append(art);
+    }
+
+    // There were more than 1 article found in the database
+    // -> Show a dialog from which the user can select the article
+    if (artList.length() > 1) {
+        ArticleSelectorDialog *sDialog = new ArticleSelectorDialog();
+        sDialog->setArticles(&artList);
+        if (sDialog->exec() > 0) {
+            art = sDialog->getSelectedArticle();
+            delete sDialog;
+        } else {
+            art = nullptr;
+        }
     }
 
     return art;

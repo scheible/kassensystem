@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     bonprinter.cpp \
     iniparser.cpp \
     customerdialog.cpp \
-    reporting.cpp
+    reporting.cpp \
+    articleselectordialog.cpp
 
 HEADERS  += mainwindow.h \
     article.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     bonprinter.h \
     iniparser.h \
     customerdialog.h \
-    reporting.h
+    reporting.h \
+    articleselectordialog.h
 
 FORMS    += mainwindow.ui \
     freearticle.ui \
