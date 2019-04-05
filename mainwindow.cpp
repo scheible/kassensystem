@@ -15,7 +15,8 @@
 #include <QMessageBox>
 #include <QDesktopWidget>
 #include "searchcustomer.h"
-#include "IniParser.h"
+
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,33 +25,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    IniParser ip("settings.ini");
-    if (ip.existsKey("databasefilename")) {
-        this->databaseFileName = ip.getValue("databasefilename").toString();
-    } else {
-        this->databaseFileName = "database.db";
-    }
-
-    if (ip.existsKey("showWarningOnArticleNotFound")) {
-        this->showWarningOnArticleNotFound = (ip.getValue("showWarningOnArticleNotFound").toInt() == 1);
-    }
+    QSettings settings("settings.ini",QSettings::IniFormat);
+    this->databaseFileName = settings.value("main/databasefilename","database.db").toString();
+    this->showWarningOnArticleNotFound = settings.value("main/showwarningonarticlenotfound",true).toBool();
 
     //Show the customer display
-    this->customerDialog = new CustomerDialog(this);
-    if (ip.existsKey("customerDialog")) {
-        if (ip.getValue("customerDialog").toInt() == 0) {
-            // custom
-            customerDialog->show();
-        } else if(ip.getValue("customerDialog").toInt() > 0) {
-             int display = ip.getValue("customerDialog").toInt()-1;
-             QDesktopWidget dw;
-             if (dw.screenCount() > display) {  //the monitor exists
-                 QRect screenres = dw.screenGeometry(display);
-                 this->customerDialog->move(QPoint(screenres.x(), screenres.y()));
-                 this->customerDialog->showFullScreen();
-             }
-        }
+    this->customerDialog = new CustomerDialog(this,this);
+    int customerDialogMode = settings.value("customerDialog/mode",0).toInt();
+
+    int display = settings.value("customerDialog/display",1).toInt();
+    QDesktopWidget dw;
+    if (dw.screenCount() > display && customerDialogMode != 0) {  //the monitor exists
+        QRect screenres = dw.screenGeometry(display);
+        this->customerDialog->move(QPoint(screenres.x(), screenres.y()));
     }
+
+    if (customerDialogMode == 1) {
+        this->customerDialog->show();
+    } else if (customerDialogMode == 2) {
+        this->customerDialog->showFullScreen();
+    }
+    // call the method setFocus otherwise the focusIn FocusOut events are not called for some reason?!
+    this->customerDialog->setFocus();
+    this->setFocus();
+
 
     // Open the database file
     QMessageBox messageBox;
@@ -101,13 +99,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->btnSaleNext->setEnabled(false);
     ui->btnJumpNewestSale->setEnabled(false);
 
-    //Load settings
-    if (ip.existsKey("articleWidth")) { ui->treeView->setColumnWidth(1,ip.getValue("articleWidth").toInt()); }
-    if (ip.existsKey("fullscreen")) {
-        if (ip.getValue("fullscreen").toBool() == true) {
-            this->showFullScreen();
-        }
-    }
+    ui->treeView->setColumnWidth(0, settings.value("salelist/pluWidth",50).toInt() );
+    ui->treeView->setColumnWidth(1, settings.value("salelist/articleWidth",500).toInt() );
+    ui->treeView->setColumnWidth(2, settings.value("salelist/quantityWidth",60).toInt() );
+    ui->treeView->setColumnWidth(3, settings.value("salelist/singlePriceWidth",60).toInt() );
+    ui->treeView->setColumnWidth(4, settings.value("salelist/sumPriceWidth",60).toInt() );
+
+    if (settings.value("main/fullscreen",false).toBool()) {this->showFullScreen();}
+
+    this->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -173,6 +173,7 @@ void MainWindow::addArticle(Article *art, float quantity) {
         }
     }
 }
+
 void MainWindow::addArticlePlu(int plu, float quantity) {
     Article* art;
     art = artFact->newPLUArticleFromDb(plu);
@@ -396,7 +397,7 @@ void MainWindow::on_btnQuantityEnter_clicked()
     }
 }
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-    if (this->isActiveWindow()) {
+    if (this->isActiveWindow() || this->customerDialog->isActiveWindow()) {
         if (event->key() == Qt::Key_B && !ui->txtSearch->hasFocus()) {
             on_btnPay_clicked();
         } else if (event->key() == Qt::Key_0 ||
@@ -422,7 +423,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     }
 }
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    if (this->isActiveWindow()) {
+    if (this->isActiveWindow() || this->customerDialog->isActiveWindow()) {
 
         if(event->key() == Qt::Key_Delete) {
             on_btnDeleteArticle_clicked();
