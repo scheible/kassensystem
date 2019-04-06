@@ -29,7 +29,6 @@ private:
     QList<IdLabel*> articles;
     QList<int> breadCrumbs;
     int categoryShown = -1;
-    bool showColors = true;
 
     void disableAllButtons();
     int getScrollbarLength();
@@ -41,7 +40,6 @@ public:
     void setupButtons(QGridLayout*);
     void setScrollBar(QScrollBar*);
     int getElementCount();
-    void setShowColors(bool show);
 
 signals:
     void addArticlePlu(int plu, float quantity);
@@ -52,8 +50,6 @@ public slots:
     void search(QString);
     void article_click(int plu);
     void goBack();
-
-    void colorChanged(QString color, int id, bool categoryFlag);
 
 };
 

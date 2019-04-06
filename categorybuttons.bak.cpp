@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include <QSqlError>
 
 CategoryButtons::CategoryButtons(QObject *parent) : QObject(parent)
 {
@@ -24,7 +23,6 @@ void CategoryButtons::setupButtons(QGridLayout *layout) {
         this->buttons.append(q);
         QObject::connect(q,SIGNAL(category_clicked(int)),this,SLOT(openCategory(int)));
         QObject::connect(q,SIGNAL(plu_clicked(int)),this,SLOT(article_click(int)));
-        QObject::connect(q,SIGNAL(color_changed(QString,int,bool)),this,SLOT(colorChanged(QString,int,bool)));
     }
     delete font;
 }
@@ -81,8 +79,9 @@ void CategoryButtons::update(int rowShift) {
         button->setText(data->label);
         button->setEnabled(true);
         button->setCategory(data->id);
-
-        if (this->showColors) {
+        if (data->color.isEmpty()) {
+            button->setColor("darkgrey");
+        } else {
             button->setColor(data->color);
         }
     }
@@ -99,9 +98,7 @@ void CategoryButtons::update(int rowShift) {
         button->setText(data->label);
         button->setEnabled(true);
         button->setPlu(data->id);
-
-        if (this->showColors)
-            button->setColor(data->color);
+        button->setColor(data->color);
     }
 
     scrollBar->setMaximum(getScrollbarLength());
@@ -176,6 +173,7 @@ void CategoryButtons::goBack() {
     }
 }
 
+// ----- this parted is added to include the color buttons ----
 void CategoryButtons::colorChanged(QString color, int id, bool categoryFlag)
 {
     QSqlQuery query;
@@ -196,3 +194,4 @@ void CategoryButtons::colorChanged(QString color, int id, bool categoryFlag)
 void CategoryButtons::setShowColors(bool show) {
     this->showColors = show;
 }
+//------------------------------------------------------------
