@@ -28,7 +28,6 @@ SOURCES += main.cpp\
     customersearchtablemodel.cpp \
     newcustomer.cpp \
     bonprinter.cpp \
-    iniparser.cpp \
     customerdialog.cpp \
     reporting.cpp \
     articleselectordialog.cpp
@@ -48,7 +47,6 @@ HEADERS  += mainwindow.h \
     customersearchtablemodel.h \
     newcustomer.h \
     bonprinter.h \
-    iniparser.h \
     customerdialog.h \
     reporting.h \
     articleselectordialog.h \

@@ -62,7 +62,7 @@ Article* ArticleFactory::newIDArticleFromDb(int id) {
     {
         return this->loadDataFromQuery(query);
     } else {
-        return false;
+        return NULL;
     }
 }
 Article* ArticleFactory::newBarcodeArticleFromDb(QString barcode) {
@@ -88,7 +88,7 @@ Article* ArticleFactory::newBarcodeArticleFromDb(QString barcode) {
     {
         return this->loadDataFromQuery(query);
     } else {
-        return false;
+        return NULL;
     }
 }
 
