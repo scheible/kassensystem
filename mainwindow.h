@@ -37,6 +37,7 @@ private:
     void unhookSale(Sale*);
     void hookSale(Sale*);
     void addArticle(Article*,float);
+    int customerDialogMode;
 
 public:
     Sale* sale;
@@ -71,6 +72,7 @@ private slots:
     void on_btnDeleteAll_clicked();
     void on_btnCalculator_clicked();
     void on_btnReporting_clicked();
+    void on_btnToggleCustomerDisplay_toggled(bool checked);
 };
 
 #endif // MAINWINDOW_H

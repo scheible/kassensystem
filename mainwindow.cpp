@@ -31,18 +31,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Show the customer display
     this->customerDialog = new CustomerDialog(this,this);
-    int customerDialogMode = settings.value("customerDialog/mode",0).toInt();
+    this->customerDialogMode = settings.value("customerDialog/mode",0).toInt();
 
     int display = settings.value("customerDialog/display",1).toInt();
     QDesktopWidget dw;
-    if (dw.screenCount() > display && customerDialogMode != 0) {  //the monitor exists
+    if (dw.screenCount() > display && this->customerDialogMode != 0) {  //the monitor exists
         QRect screenres = dw.screenGeometry(display);
         this->customerDialog->move(QPoint(screenres.x(), screenres.y()));
     }
 
-    if (customerDialogMode == 1) {
+    if (this->customerDialogMode == 0) {
+        ui->btnToggleCustomerDisplay->hide();
+    }
+
+    if (this->customerDialogMode == 1) {
         this->customerDialog->show();
-    } else if (customerDialogMode == 2) {
+    } else if (this->customerDialogMode == 2) {
         this->customerDialog->showFullScreen();
     }
     // call the method setFocus otherwise the focusIn FocusOut events are not called for some reason?!
@@ -475,4 +479,19 @@ void MainWindow::on_btnReporting_clicked()
 {
     Reporting *rtp = new Reporting();
     rtp->show();
+}
+
+void MainWindow::on_btnToggleCustomerDisplay_toggled(bool checked)
+{
+    if (ui->btnToggleCustomerDisplay->isChecked()) {
+        qDebug("Customer Display on");
+        if (this->customerDialogMode == 1) {
+            this->customerDialog->show();
+        } else if (this->customerDialogMode == 2) {
+            this->customerDialog->showFullScreen();
+        }
+    } else {
+        qDebug("Custoerm Display off");
+        this->customerDialog->hide();
+    }
 }

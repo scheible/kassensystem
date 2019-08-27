@@ -51,6 +51,9 @@ QTreeView::item::selected::active {
         <property name="locale">
          <locale language="German" country="Germany"/>
         </property>
+        <property name="indentation">
+         <number>0</number>
+        </property>
         <attribute name="headerMinimumSectionSize">
          <number>49</number>
         </attribute>
@@ -202,6 +205,9 @@ QTreeView::item::selected::active {
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
             </property>
             <property name="styleSheet">
              <string notr="true">background: red;</string>
@@ -443,6 +449,19 @@ QTreeView::item::selected::active {
            <widget class="QPushButton" name="btnReporting">
             <property name="text">
              <string>Umsätze</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnToggleCustomerDisplay">
+            <property name="text">
+             <string>Kundendisplay AN/AUS</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
