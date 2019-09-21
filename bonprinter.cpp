@@ -68,14 +68,14 @@ void BonPrinter::print() {
 
 void BonPrinter::loadTemplatesFromFiles() {
     //Windows File Path format
-    /*this->headerTemplate = this->loadTextFromFile("bon_template\\header_template.html");
+    this->headerTemplate = this->loadTextFromFile("bon_template\\header_template.html");
     this->itemTemplate = this->loadTextFromFile("bon_template\\item_template.html");
-    this->footerTemplate = this->loadTextFromFile("bon_template\\footer_template.html");*/
+    this->footerTemplate = this->loadTextFromFile("bon_template\\footer_template.html");
 
     //Linux file path format
-    this->headerTemplate = this->loadTextFromFile("bon_template/header_template.html");
+    /*this->headerTemplate = this->loadTextFromFile("bon_template/header_template.html");
     this->itemTemplate = this->loadTextFromFile("bon_template/item_template.html");
-    this->footerTemplate = this->loadTextFromFile("bon_template/footer_template.html");
+    this->footerTemplate = this->loadTextFromFile("bon_template/footer_template.html");*/
 
 }
 QString BonPrinter::loadTextFromFile(const QString filename) {

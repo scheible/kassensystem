@@ -164,6 +164,8 @@ void Sale::clear() {
         }
 
         emit totalChanged(getTotal());
+        emit articleCountChanged(this->getArticleCount());
+        emit takebackCountChanged(this->getTakebackCount());
     }
 }
 void Sale::addArticle(Article* art)  {
@@ -284,7 +286,7 @@ QVariant Sale::data(const QModelIndex & index, int role) const {
         if (!article->isDeposit() && !article->isTakeBack()) {
             font.setBold(true);
         }
-        if (!article->isTakeBack()) {
+        if (article->isDeposit()) {
             font.setItalic(true);
         }
         return QVariant(font);

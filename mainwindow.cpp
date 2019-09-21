@@ -305,6 +305,8 @@ void MainWindow::hookSale(Sale* s) {
 
     updateTime(sale->getTimestampStart());
     updateTotal(sale->getTotal());
+    updateArticleCount(sale->getArticleCount());
+    updateTakebackCount(sale->getTakebackCount());
     this->customerDialog->updateTotal(sale->getTotal());
     showMessage("");
 }
