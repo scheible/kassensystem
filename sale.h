@@ -51,6 +51,8 @@ public:
     bool isLocked();
     float pay(float givenMoney);
     float getGivenMoney();
+    float getArticleCount();
+    float getTakebackCount();
 
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex & index) const;
@@ -65,6 +67,8 @@ signals:
     void newMessage(QString msg);
     void articleDeleted();
     void startTimeIsUpdated(QDateTime);
+    void articleCountChanged(float count);
+    void takebackCountChanged(float count);
 
 public slots:
     void addArticle(Article* art);

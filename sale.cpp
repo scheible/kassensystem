@@ -190,6 +190,8 @@ void Sale::addArticle(Article* art)  {
 
         refreshColorList();
         emit totalChanged(this->getTotal());
+        emit articleCountChanged(this->getArticleCount());
+        emit takebackCountChanged(this->getTakebackCount());
         endInsertRows();
     }
 }
@@ -198,6 +200,8 @@ void Sale::updateTotal() {
 }
 void Sale::refresh() {
     emit dataChanged(index(0,0),index(articles.length(),6));
+    emit articleCountChanged(this->getArticleCount());
+    emit takebackCountChanged(this->getTakebackCount());
 }
 bool Sale::isLocked() {
     return locked;
@@ -219,6 +223,8 @@ void Sale::deleteArticle() {
     //As this affects the total emit the signal
     refreshColorList();
     emit totalChanged(this->getTotal());
+    emit articleCountChanged(this->getArticleCount());
+    emit takebackCountChanged(this->getTakebackCount());
 }
 QModelIndex Sale::index(int row, int column, const QModelIndex & parent) const {
     if (!parent.isValid() && row < articles.length())
@@ -270,6 +276,18 @@ QVariant Sale::data(const QModelIndex & index, int role) const {
                 return QVariant( c );
             }
         }
+    } else if (role == Qt::FontRole) {
+        QFont font;
+        Article* article;
+        article = static_cast<Article*>(index.internalPointer());
+
+        if (!article->isDeposit() && !article->isTakeBack()) {
+            font.setBold(true);
+        }
+        if (!article->isTakeBack()) {
+            font.setItalic(true);
+        }
+        return QVariant(font);
     }
     return QVariant();
 }
@@ -310,4 +328,30 @@ void Sale::refreshColorList() {
 
 float Sale::getGivenMoney() {
     return this->givenMoney;
+}
+
+float Sale::getArticleCount()
+{
+    float sum=0;
+    Article* a;
+    for (int i=0; i<(this->articles.length()); i++) {
+        a = this->articles.at(i);
+        if (!a->isDeposit() && !a->isTakeBack()) {
+            sum = sum + a->getQuantity();
+        }
+    }
+    return sum;
+}
+
+float Sale::getTakebackCount()
+{
+    float sum=0;
+    Article* a;
+    for (int i=0; i<(this->articles.length()); i++) {
+        a = this->articles.at(i);
+        if (!a->isDeposit() && a->isTakeBack()) {
+            sum = sum + a->getQuantity();
+        }
+    }
+    return sum;
 }

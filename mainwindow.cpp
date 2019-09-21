@@ -252,6 +252,16 @@ void MainWindow::updateTotal(float total) {
 void MainWindow::updateTime(QDateTime datetime) {
     ui->lblTimestampStart->setText( datetime.toString("hh:mm:ss - dd.MM.yy"));
 }
+
+void MainWindow::updateArticleCount(float count)
+{
+    ui->lblArticleCountValue->setText(QString::number(count));
+}
+
+void MainWindow::updateTakebackCount(float count)
+{
+    ui->lblTakebackCountValue->setText(QString::number(count));
+}
 void MainWindow::on_txtSearch_returnPressed()
 {
     if (ui->txtSearch->text() != "") {
@@ -267,6 +277,8 @@ void MainWindow::unhookSale(Sale* s) {
     QObject::disconnect(s,SIGNAL(newMessage(QString)),this,SLOT(showMessage(QString)));
     //QObject::disconnect(ui->treeView->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),sale,SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::disconnect(s,SIGNAL(totalChanged(float)),this,SLOT(updateTotal(float)));
+    QObject::disconnect(s,SIGNAL(articleCountChanged(float)),this,SLOT(updateArticleCount(float)));
+    QObject::disconnect(s,SIGNAL(takebackCountChanged(float)),this,SLOT(updateTakebackCount(float)));
     QObject::disconnect(s,SIGNAL(startTimeIsUpdated(QDateTime)),this,SLOT(updateTime(QDateTime)));
     QObject::disconnect(s,SIGNAL(totalChanged(float)),this->customerDialog,SLOT(updateTotal(float)));
 
@@ -286,6 +298,8 @@ void MainWindow::hookSale(Sale* s) {
     QObject::connect(s,SIGNAL(newMessage(QString)),this,SLOT(showMessage(QString)));
     //QObject::connect(ui->treeView->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),sale,SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QObject::connect(s,SIGNAL(totalChanged(float)),this,SLOT(updateTotal(float)));
+    QObject::connect(s,SIGNAL(articleCountChanged(float)),this,SLOT(updateArticleCount(float)));
+    QObject::connect(s,SIGNAL(takebackCountChanged(float)),this,SLOT(updateTakebackCount(float)));
     QObject::connect(s,SIGNAL(startTimeIsUpdated(QDateTime)),this,SLOT(updateTime(QDateTime)));
     QObject::connect(s,SIGNAL(totalChanged(float)),this->customerDialog,SLOT(updateTotal(float)));
 

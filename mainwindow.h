@@ -57,6 +57,8 @@ private slots:
     void on_btnDeleteArticle_clicked();
     void updateTotal(float total);
     void updateTime(QDateTime datetime);
+    void updateArticleCount(float count);
+    void updateTakebackCount(float count);
 
     void on_txtSearch_returnPressed();
     void on_btnCategoryGoToRoot_clicked();
