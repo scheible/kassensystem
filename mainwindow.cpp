@@ -9,6 +9,7 @@
 #include "changequantity.h"
 #include "paydialog.h"
 #include "reporting.h"
+#include "salefactory.h"
 
 #include <QStandardItemModel>
 #include <QDebug>
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings("settings.ini",QSettings::IniFormat);
     this->databaseFileName = settings.value("main/databasefilename","database.db").toString();
     this->showWarningOnArticleNotFound = settings.value("main/showwarningonarticlenotfound",true).toBool();
+    this->nRestoreOldSales = settings.value("main/restoreoldsales",20).toInt();
 
     //Show the customer display
     this->customerDialog = new CustomerDialog(this,this);
@@ -53,6 +55,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->customerDialog->setFocus();
     this->setFocus();
 
+    //On startup there is only one sale object active (the current one). There is no need
+    //to go back to another sale
+    ui->btnSaleBack->setEnabled(false);
+    ui->btnSaleNext->setEnabled(false);
+    ui->btnJumpNewestSale->setEnabled(false);
 
     // Open the database file
     QMessageBox messageBox;
@@ -82,6 +89,9 @@ MainWindow::MainWindow(QWidget *parent) :
     salesQueue.prepend(sale);
     hookSale(sale); //Connect the sale object to the GUI
 
+    // Restore old sales
+    this->loadOldSales();
+
     artFact = new ArticleFactory(this->databaseFileName);
 
     catButtons = new CategoryButtons(this);
@@ -96,12 +106,6 @@ MainWindow::MainWindow(QWidget *parent) :
     list.append(3*width()/4);
     list.append(width()/4);
     ui->splitter_2->setSizes(list);
-
-    //On startup there is only one sale object active (the current one). There is no need
-    //to go back to another sale
-    ui->btnSaleBack->setEnabled(false);
-    ui->btnSaleNext->setEnabled(false);
-    ui->btnJumpNewestSale->setEnabled(false);
 
     ui->treeView->setColumnWidth(0, settings.value("salelist/pluWidth",50).toInt() );
     ui->treeView->setColumnWidth(1, settings.value("salelist/articleWidth",500).toInt() );
@@ -118,6 +122,21 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::loadOldSales() {
+    // When the program is started, the old sales
+    // are restored from the database.
+    int restored = 0;
+    SaleFactory saleFactory;
+
+    restored = saleFactory.loadOldSalesFromDatabase(this->nRestoreOldSales, &this->salesQueue);
+
+    if (restored > 0) {
+        ui->btnSaleBack->setEnabled(true);
+    }
+
+}
+
 void MainWindow::deleteArticle() {
 
 }

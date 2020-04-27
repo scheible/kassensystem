@@ -168,6 +168,12 @@ void Sale::clear() {
         emit takebackCountChanged(this->getTakebackCount());
     }
 }
+
+void Sale::setStartTime(QDateTime dt) {
+    this->timestampStart = dt;
+    emit startTimeIsUpdated(this->timestampStart);
+}
+
 void Sale::addArticle(Article* art)  {
     if (!locked) {
         beginInsertRows(QModelIndex(),articles.length(),articles.length());
@@ -208,6 +214,9 @@ void Sale::refresh() {
 bool Sale::isLocked() {
     return locked;
 }
+void Sale::setLocked() {
+    this->locked = true;
+}
 
 
 void Sale::deleteArticle() {
@@ -228,6 +237,12 @@ void Sale::deleteArticle() {
     emit articleCountChanged(this->getArticleCount());
     emit takebackCountChanged(this->getTakebackCount());
 }
+
+
+void Sale::setId(int id) {
+    this->id = id;
+}
+
 QModelIndex Sale::index(int row, int column, const QModelIndex & parent) const {
     if (!parent.isValid() && row < articles.length())
         return createIndex(row,column,articles.at(row));

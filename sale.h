@@ -49,10 +49,13 @@ public:
     QDateTime getTimestampStart();
     QDateTime getTimestampPay();
     bool isLocked();
+    void setLocked();
     float pay(float givenMoney);
     float getGivenMoney();
     float getArticleCount();
     float getTakebackCount();
+    void setId(int id);
+    void setStartTime(QDateTime dt);
 
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex & index) const;

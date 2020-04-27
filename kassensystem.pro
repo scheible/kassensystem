@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     bonprinter.cpp \
     customerdialog.cpp \
     reporting.cpp \
-    articleselectordialog.cpp
+    articleselectordialog.cpp \
+    salefactory.cpp
 
 HEADERS  += mainwindow.h \
     article.h \
@@ -50,7 +51,8 @@ HEADERS  += mainwindow.h \
     customerdialog.h \
     reporting.h \
     articleselectordialog.h \
-    globals.h
+    globals.h \
+    salefactory.h
 
 FORMS    += mainwindow.ui \
     freearticle.ui \
@@ -62,3 +64,5 @@ FORMS    += mainwindow.ui \
     reporting.ui
 
 include(3rdparty/xlsx/qtxlsx.pri)
+
+RC_ICONS = kasse.ico

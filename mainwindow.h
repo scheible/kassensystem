@@ -34,10 +34,12 @@ private:
     QSqlDatabase db;
     QString databaseFileName;
     bool showWarningOnArticleNotFound = true;
+    int nRestoreOldSales = 0;
     void unhookSale(Sale*);
     void hookSale(Sale*);
     void addArticle(Article*,float);
     int customerDialogMode;
+    void loadOldSales();
 
 public:
     Sale* sale;
