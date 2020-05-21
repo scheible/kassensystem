@@ -30,6 +30,7 @@ private:
 public slots:
     void updateTotal(float total);
     void updateBack(float change);
+    void scrollToLast();
 
 };
 

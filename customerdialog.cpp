@@ -3,6 +3,7 @@
 #include "sale.h"
 #include <QDebug>
 #include <QSettings>
+#include <QScrollBar>
 
 CustomerDialog::CustomerDialog(QMainWindow *m, QWidget *parent) :
     QDialog(parent),
@@ -27,11 +28,17 @@ void CustomerDialog::setModel(Sale* s) {
     this->ui->treeView->setModel(s);
     ui->treeView->hideColumn(0);
 
+    QObject::connect(s, SIGNAL(rowsInserted(QModelIndex,int,int)),this,SLOT(scrollToLast()));
+
     QSettings settings("settings.ini",QSettings::IniFormat);
     ui->treeView->setColumnWidth(1, settings.value("customerDialog/articleWidth",500).toInt() );
     ui->treeView->setColumnWidth(2, settings.value("customerDialog/quantityWidth",100).toInt() );
     ui->treeView->setColumnWidth(3, settings.value("customerDialog/singlePriceWidth",100).toInt() );
     ui->treeView->setColumnWidth(4, settings.value("customerDialog/sumPriceWidth",100).toInt() );
+}
+
+void CustomerDialog::scrollToLast() {
+    ui->treeView->scrollToBottom();
 }
 
 bool CustomerDialog::focusInEvent(QEvent *event)
